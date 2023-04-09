@@ -1,0 +1,103 @@
+//grade: 11/10
+
+public class AthleticLocker extends Locker{
+  private String sports; 
+  private int numGear; 
+  private static double minAvgGrade=75.0; 
+
+  public AthleticLocker(String student, int studGradeLevel, int combo1, int combo2, int combo3,String sportsPlayed){
+    super(student,studGradeLevel,true,combo1,combo2,combo3); 
+    sports=sportsPlayed; 
+    numGear=0; 
+  }
+  //precondition: enter the title of the book or gear to put into the locker
+  //postcondition: returns whether the books or gear was put in or not
+  public boolean putInLocker(String title) {
+    if (title.substring(0,1).equals("!")&&numGear<2) {
+      numGear++; 
+      return super.putInLocker(title);
+    }
+    if (!title.substring(0,1).equals("!")){
+      super.putInLocker(title);
+      return true; 
+    }
+    else {
+      return false; 
+    }
+  }
+  //precondition: enter the title of the book or gear you want to remove from the locker
+  //postcondition: returns whether the book or gear was removed
+  public boolean removeFromLocker(String title) {
+    if (super.findBook(title)==false)
+      return false;
+    else if (title.substring(0,1).equals("!"))
+      numGear--; 
+    return super.removeFromLocker(title); 
+  }
+  //precondition: changes the eligibility of a student to be an athlete
+  //postcondition: void method, do not return anything
+  public void changeEligibility(){
+    if (getOwner().numGradesBelowMin(minAvgGrade)>0)
+      getOwner().setAthlete(false); 
+    else
+      getOwner().setAthlete(true); 
+  }
+  //precondition: enter the name of a sport to remove from a student
+  //postcondition: return whether the sport was removed
+  public boolean removeSport(String sportName){
+    int index=sports.indexOf(" "+sportName+" ");
+    if (sports.indexOf(sportName+" ")==0){
+      sports=sports.substring(sportName.length()+1);
+      return true;
+    }
+    else if (index>0){
+      sports=sports.substring(0,index)+sports.substring(index+sportName.length()+1);
+      return true; 
+    }
+    else
+      return false; 
+  }
+  //precondition: getter method
+  //postcondition: returns the minimum grade
+  public static double getMinGrade(){
+    return minAvgGrade;
+  }
+  //precondition: enter the new minimum grade to change it
+  //postcondition: changes the minimum grade, does not return anything
+  public static void setMinGrade(double grade){
+    minAvgGrade=grade; 
+  }
+  //precondition: don't need to enter anything
+  //postcondition: returns information about the locker and athletic locker
+  public String toString(){
+    return super.toString()+"The owner plays "+sports+"and has "+numGear+" pieces of gear in locker."; 
+  }
+	// for testing purposes only, methods given to you, do not change
+	/*
+	 * precondition: 0<= numGear <=2
+	 * postcondition: returns the number of athletic items stored in the locker
+	 */
+	public int getNumGear() {
+		return numGear;
+	}
+
+	/*
+	 * precondition: none
+	 * postcondition: this clears the String that contains sports played by current
+	 * owner
+	 */
+	public void clearSports() {
+		sports = "";
+	}
+
+	/*
+	 * preconditions: newSport represents the name of a new sport
+	 * the current owner has started to play,
+	 * sport cannot already contain newSport, newSport cannot contain any spaces
+	 * postcondition: will add the newSport and a subsequent space to sports
+	 */
+	public void addSport(String newSport) {
+		sports += newSport + " ";
+	}
+
+}
