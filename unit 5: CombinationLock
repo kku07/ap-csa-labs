@@ -1,0 +1,91 @@
+//grade: 10/10
+
+public class CombinationLock {
+private int combo1;
+private int combo2;
+private int combo3;
+private int currentPosition;
+private int numTries;
+
+public CombinationLock() {
+	scramble();
+	currentPosition=0;
+	numTries=0;
+}
+
+  //must be called with arguments between 0 and 39 inclusive
+public CombinationLock(int initial1, int intial2, int initial3) {
+	combo1=initial1;
+	combo2=intial2;
+	combo3=initial3;
+	currentPosition=0;
+	numTries=0;
+}
+
+public int getCurrentPosition() {
+  return currentPosition;
+}
+
+public int getNumTries() {
+	return numTries;
+}
+/*you can eliminate these getter methods if you want the combo to be private */
+
+public int getCombo1() {
+	return combo1;
+}
+
+public int getCombo2() {
+	return combo2;
+}
+
+public int getCombo3() {
+	return combo3;
+}
+
+/* no other setter methods than those below- the turn methods change the position, numTries should only be modified in the OpenLock method, the combination is reset with scramble */
+
+public void resetDial() {
+	currentPosition=0;
+}
+
+public void turnCW(int ticks) {
+  currentPosition=(currentPosition-ticks)%40;
+  if(currentPosition<0)
+    currentPosition += 40;
+}
+
+public void turnCCW(int ticks) {
+	currentPosition=(currentPosition+ticks)%40;
+}
+
+public void scramble() {
+	combo1= (int)(Math.random()*40);
+	combo2= (int)(Math.random()*40);
+	combo3= (int)(Math.random()*40);
+}
+
+public boolean openLock(int turn1, int turn2, int turn3) {
+  resetDial();
+	if (numTries >= 3) { //if a break is suspected
+		scramble();
+		numTries=0;
+		return false;
+	}
+  boolean opened=false;
+  
+  turnCW(turn1); //first turn
+	if (currentPosition==combo1) opened=true;
+	
+  turnCCW(turn2); //second turn
+	if (currentPosition!=combo2) opened=false;
+  
+  turnCW(turn3); //third turn
+	if (currentPosition!=combo3) opened=false;
+
+	if (!opened)	
+		numTries++;
+	return opened;
+}
+
+}
