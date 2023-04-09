@@ -1,0 +1,150 @@
+//grade: 10/10
+
+import java.util.Scanner;
+import java.text.DecimalFormat;
+
+public class Main {
+
+  // do not change this code or add to the main method, this is for testing
+  // purposes only
+  public static void main(String[] args) {
+
+    int numMoves = 7; // set to 6 moves
+    double blockLength = 3; // 0.5 miles
+
+    // call method drive and store distance from city center in variable distance
+    double distance = drive(numMoves, blockLength);
+
+    // DecimalFormat for two decimal places
+    DecimalFormat d = new DecimalFormat("0.00");
+
+    // output the distance from city center
+    System.out.print("Final distance from city center: ");
+    System.out.println(d.format(distance) + " miles.");
+  }
+
+  /*
+   * precondition: numMoves is an integer and represents how many move decisions
+   * to make,
+   * blockLength is a double that represents the length of a city block in miles.
+   * 
+   * postcondition: returns type double value of distance the car is from origin
+   * (0,0)
+   * using the distance formula d = √[(x₂ - x₁)² + (y₂ - y₁)²]
+   */
+  public static double drive(int numMoves, double blockLength) {
+
+    char directionFacing = 'n'; // initialize facing north 'n'
+    int xCoordinate = 0;
+    int yCoordinate = 0;
+    double distance = 0;
+    // add your code before and after the drawGrid method call
+    drawGrid(xCoordinate, yCoordinate);
+    for (int i = 0; i < numMoves; i++) {
+      int x = getMove();
+
+      if (x == 0) {
+        if (directionFacing == 'n') {
+          directionFacing = 'n';
+          yCoordinate += 1;
+        } else if (directionFacing == 'e') {
+          directionFacing = 'e';
+          xCoordinate += 1;
+        } else if (directionFacing == 's') {
+          directionFacing = 's';
+          yCoordinate -= 1;
+        } else {
+          directionFacing = 'w';
+          xCoordinate -= 1;
+        }
+      } else if (x == 1) {
+        if (directionFacing == 'n') {
+          directionFacing = 'w';
+          xCoordinate -= 1;
+        } else if (directionFacing == 'e') {
+          directionFacing = 'n';
+          yCoordinate += 1;
+        } else if (directionFacing == 's') {
+          directionFacing = 'e';
+          xCoordinate += 1;
+        } else {
+          directionFacing = 's';
+          yCoordinate -= 1;
+        }
+      } else if (x == 2) {
+        if (directionFacing == 'n') {
+          directionFacing = 'e';
+          xCoordinate += 1;
+        } else if (directionFacing == 'e') {
+          directionFacing = 's';
+          yCoordinate -= 1;
+        } else if (directionFacing == 's') {
+          directionFacing = 'w';
+          xCoordinate -= 1;
+        } else {
+          directionFacing = 'n';
+          yCoordinate += 1;
+        }
+      } else {
+        getMove();
+      }
+      drawGrid(xCoordinate, yCoordinate);
+    }
+    distance = Math.sqrt(Math.pow(xCoordinate, 2) + Math.pow(yCoordinate, 2))*blockLength;
+    return distance;
+  }
+
+  /*
+   * postcondition - returns an int with one of three values representing car
+   * movement
+   * 0 = straight, 1 = left, 2 = right
+   */
+  public static int getMove() {
+    int move = -1; // initialize to -1 to force entry into while loop
+
+    Scanner in = new Scanner(System.in);
+    // continue to prompt the user until they input a valid value
+    while (move < 0 || move > 3) {
+      System.out.print("\nWhat move do you want to make ");
+      System.out.print("0 = straight, 1 = left, 2 = right, 3 = random):");
+      move = in.nextInt();
+    }
+    if (move == 3) 
+      move = (int)(Math.random() * 3);
+    // add your code here to finish the implementation of the method, according to
+    // lab directions
+
+    return move;
+  }
+
+  /*
+   * precondition - input x, y integers representing car position on coordinate
+   * plane
+   * postcondition - prints grid with representation of car location, no return
+   * value
+   */
+
+  public static void drawGrid(int x, int y) {
+
+    System.out.println();
+
+    int max = 12;
+    x = x + max / 2;
+    y = max / 2 - y;
+
+    for (int i = 0; i <= max; i++) {
+      for (int j = 0; j <= max; j++) {
+
+        if (i == y && j == x) {
+          System.out.print("🚗 ");
+        } else if (i == max / 2 && j == max / 2) {
+          System.out.print("🏙️  ");
+        } else {
+          System.out.print(" + ");
+        }
+      }
+      System.out.println();
+    }
+  }
+
+}
