@@ -1,0 +1,227 @@
+//6 out of 9 test cases (grade: 90%)
+
+public class MatrixMath{
+
+  //for all of the methods, preserve the contents of any array arguments unless indicated otherwise in the directions
+
+/* precondition: a is a rectangular array
+postcondition: will return true if a is a square array, false otherwise*/
+  public static boolean isSquare(double[][] a) {
+    return a[0].length==a.length;
+  }
+  
+  /* precondition: a and b are rectangular arrays
+postcondition: will return true if a and b can be added or subtracted, false otherwise */
+  public static boolean canAddSubtract(double[][] a, double[][] b) {
+      return a.length == b.length && a[0].length == b[0].length;
+  }
+
+  /* precondition: a and b are rectangular arrays
+postcondition: will return true if a can be multiplied by b (a*b), false otherwise */
+  public static boolean canMultiply(double[][] a, double[][] b) {
+    return a[0].length==b.length; 
+  }
+  
+  /* precondition: a and b are rectangular arrays
+  postcondition: will return the array that is the sum of a and b if possible to add, 
+return the array [[0.0]] otherwise - this code has been written for you!*/
+  public static double[][] add(double[][] a, double[][] b) {
+    double[][] arr=new double[a.length][a[0].length]; 
+    if (canAddSubtract(a,b)){
+      for (int row=0; row<a.length; row++){
+        for (int col=0; col<a[0].length; col++){
+          arr[row][col]=a[row][col]+b[row][col];
+        }
+      }
+      return arr; 
+    }
+    else //not possible to add!
+      return new double[][]{{0.0}};
+  }
+
+  /* precondition: a and b are rectangular arrays
+  postcondition: if possible to subtract, return the array that is the difference a-b, 
+  return the array [[0.0]] otherwise*/
+  public static double[][] subtract(double[][] a, double[][] b) {
+    double[][] arr = new double[a.length][a[0].length];
+    if(canAddSubtract(a, b)){
+      for(int row = 0; row < a.length; row++){
+        for(int col = 0; col < a[0].length; col++){
+          arr[row][col] = a[row][col] - b[row][col];
+        }
+      }
+      return arr;
+    }else{
+      return new double[][]{{0.0}};
+    }
+  }
+
+  /* precondition: r is a valid row index number, a may not be a rectangular array
+postcondition: elementary row operation called scaling, 
+returns the 1D array of elements in row with index r after being multiplied by scalar value 
+Example: if a holds 1,2,3,4
+                    5,6,7,8
+                    9,10,11,12
+  scaleRow(10, 1, a) returns --> [50,60,70,80]*/
+  public static double[] scaleRow(double scalar, int r, double[][] a) {
+    double[] arr=new double[a[0].length];
+    for (int i=0; i<a[0].length; i++){
+      arr[i]=a[r][i]*scalar; 
+    }
+    return arr; 
+  } 
+  
+  /* precondition: a is a rectangular array
+postcondition: will return a 2D array that contains all elements in array a after being multiplied by scalar value 
+DO NOT REPEAT CODE, CALL THE scaleRow method here!
+To initialize a row of a 2D matrix with a given 1D matrix use:
+            arrName[rowIndex]=1D array */
+  public static double[][] scMultiply(double scalar, double[][] a) {
+    double[][] arr = new double[a.length][a[0].length];
+    for(int row = 0; row < a.length; row++){
+      arr[row] = scaleRow(scalar, row, a);
+    }
+    return arr;
+  }
+
+  /* precondition: a and b are rectangular arrays
+postcondition: if possible to multiply two arrays, return the array that is the product a*b
+return the array [0.0] otherwise
+
+HINTS: you will need a triple-nested loop to do this, 
+-one loop will keep track of the row index that is being traversed in array a 
+-one loop will keep track of the column index that is being traversed in array b 
+-one loop will keep track of an index number that is both a row and column index as the program traverses one row in array a and one column in array b in order to multiply corresponding elements 
+
+Don't forget to reset the sum value to 0 before the program calculates another element in the returned array*/
+  public static double[][] matrixMultiply(double[][] a, double[][] b){
+    int sum=0; 
+    if(a.length == b[0].length){
+    double arr[][] = new double[a.length][b[0].length];
+      for (int row=0; row<a.length; row++){
+        for (int col=0; col<b[0].length; col++){
+          for (int i=0;i<a.length; i++){
+            sum+=a[row][i]*b[i][col];
+          }
+          arr[row][col]=sum; 
+        }
+      } 
+      return arr;
+    }
+    else
+      return new double[][]{{0.0}};
+  }
+
+
+  /*precondition: a is a rectangular array
+   postcondition: returns the identity matrix for a, see slides for description of identity matrix 
+  */
+  public static int[][] returnIDMat(double[][] a) {
+    int[][] arr = new int[a.length][a.length];
+    for(int row = 0; row < a.length; row++){
+      for(int col = 0; col < a.length; col++){
+        if(row == col){
+          arr[row][col] = 1;
+        }else{
+          arr[row][col] = 0;
+        }
+      }
+    }
+
+    
+    return arr;
+  }
+
+
+  /* used to calculate determinant of a matrix
+ precondition: a is a rectangular array, a.length>1 and a[0].length>1
+               r is a valid row index and c is a valid column index in array a
+postcondition: returned array will contain all elements in a, with elements in row r and column c removed
+
+HINT: you will need
+-a variable to keep track of the row index in which to place a value into the returned array
+-a variable to keep track of the column index in which to place a value into the returned array
+-nested loops with loop control variables to keep track of the row and column indices of elements in array a during traversal, these lcv variables will be used to access the value of an element in array a */
+  public static double[][] submatrix(double[][] a, int r, int c) {
+    double[][]arr=new double[a.length-1][a[0].length-1];
+    int i=0; 
+    int j=0; 
+    for (int row=0; row<a.length; row++){
+      for (int col=0; col<a[0].length; col++){
+         if (row!=r&&col!=c){
+           arr[i][j]=a[row][col];
+           j++;
+           if (j==arr[0].length){
+            i++; 
+            j=0; 
+           }
+         }
+      } 
+    }
+    return arr; 
+  }
+
+  /* 
+  precondition: a is a 2x2 matrix
+  postcondition: returns determinant of a 2x2 matrix */
+  public static double calcDeterminant2(double[][] a) {
+    return a[0][0]*a[1][1]-a[0][1]*a[1][0]; 
+  }
+
+   /* 
+  precondition: a is a 3x3 matrix
+  postcondition: returns determinant of a 3x3 matrix */
+  public static double calcDeterminant3(double[][] a) {
+    double determinant=0; 
+    for (int i=0; i<3; i++){  
+      double arr[][] = submatrix(a, 0, i);
+        determinant+=calcDeterminant2(arr)*a[0][i]; 
+    }
+    return determinant; 
+  }
+    
+  /* precondition: a is a rectangular array
+  postcondition: if square and length<4, will return true if a is invertible
+  false otherwise
+   */
+  public static boolean isInvertible(double[][] a) {
+    if(a.length==a[0].length && a.length<4){
+      
+      if(a.length == 2){
+        if(calcDeterminant2(a) != 0)
+          return true;
+      }
+      
+      if(a.length == 3){
+        if(calcDeterminant3(a) != 0)
+          return true;
+      }
+      return false;
+    }else{
+      return false;
+    }
+  }
+
+  /* precondition: a is a rectangular array, r1 < a.length, r2 < a.length, r1 != r2
+  postcondition: this method will modify the contents of array a
+all elements in r2 are multiplied by scalar, then adds the corresponding elements in row number r1 and the new scaled elements in row r2 and stores each sum in r1 */
+  public static void replace(int r1, int r2, double scalar, double[][] a) {
+    a[r2] = scaleRow(scalar, r2, a);
+    
+    for (int i=0; i < a[r1].length; i++){
+      //a[r1][i] += a[r2][i];
+      a[r1][i] = a[r1][i] + a[r2][i];
+    }
+
+  }
+
+  /* precondition: a is a rectangular matrix, r1 < a.length, r2< a.length
+  postcondition: this method will modify the contents of array a
+the corresponding elements in row r1 and r2 will be swapped
+remember that rows in a 2d array are arrays, DO NOT USE A LOOP!!!*/
+  public static void interchange(int r1, int r2, double[][] a) {
+    double temp[]=a[r1]; 
+    a[r1]=a[r2]; 
+    a[r2]=temp; 
+  }
+}
