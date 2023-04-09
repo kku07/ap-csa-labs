@@ -1,0 +1,68 @@
+//grade: 10.5/10
+
+import java.util.Scanner;
+
+public class Slope{
+
+  //do not change any of this code, for testing purposes only
+  public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    System.out.println("Enter the coordinates of point 1 with a space between x y:"); 
+    int firstX = in.nextInt(); //stores x of first coordinate
+    int firstY = in.nextInt(); //stores y of first coordinate
+    System.out.println("Enter the coordinates of point 2 with a space between x y:");
+    int secondX = in.nextInt(); //stores x of second coordinate
+    int secondY = in.nextInt(); //stores y of second coordinate
+    
+    calcSlope(firstX,firstY,secondX,secondY);//will not print
+    calcYIntercept(firstX,firstY,secondX,secondY);//will not print
+    
+    printEquation(firstX, firstY, secondX, secondY); //will print
+  }
+  /*precondition: enter coordinates of 2 integer ordered pairs that don't have the same x-values. 
+  postcondition: returns return a double value representing the slope of the line that contains (x1, y1) and (x2,y2)*/
+  public static double calcSlope(int x1, int y1, int x2, int y2) {
+      return ((double)y2-y1)/(x2-x1);
+  }
+  /*precondition: enter coordinates of 2 integer ordered pairs that don't have the same x-values. 
+    postcondition: return a double value representing the y-intercept of the line*/
+  public static double calcYIntercept(int x1, int y1, int x2, int y2) {
+    return y1-calcSlope(x1,y1,x2,y2)*x1;
+  }
+  /*precondition: enter coordinates of 2 integer ordered pairs that don't have the same x-values. 
+  postcondition: prints information about the slope-intercept equation of a line that goes through  (x1,y1) and (x2, y2). Alerts the user if the line is vertival, horizontonal, or the points are the same.*/
+  public static void printEquation(int x1, int y1, int x2, int y2){
+    if (x1==x2 && y1==y2)
+      System.out.println("These points are the same!\nEquation of the line: there is not a unique line through these points");
+    else if (x1==x2) {
+      System.out.println("Alert! The line is vertical.");
+      System.out.println("Equation of the line: x=" + x1);
+    }
+    else if (y1==y2) {
+      System.out.println("Alert! The line is horizontal.");
+      System.out.println("Equation of the line: y=" + (int)calcYIntercept(x1,y1,x2,y2));
+    }
+    else {
+      double m = calcSlope(x1,y1,x2,y2);
+      double b = calcYIntercept(x1,y1,x2,y2);
+      if (m==1&&b>0)
+        System.out.println("Equation of the line: y=x+" + b);
+      else if (m==1&&b<0)
+        System.out.println("Equation of the line: y=x" + b);
+      else if (m==1&&b==0)
+        System.out.println("Equation of the line: y=x");
+      else if (m==-1&&b>0)
+        System.out.println("Equation of the line: y=-x+" + b);
+      else if (m==-1&&b<0)
+        System.out.println("Equation of the line: y=-x" + b);
+      else if (m==-1&&b==0)
+        System.out.println("Equation of the line: y=-x");
+      else if (b==0)
+        System.out.println("Equation of the line: y=" + m +"x");
+      else if (b<0)
+        System.out.println("Equation of the line: y="+ m +"x" + b);
+      else
+        System.out.println("Equation of the line: y=" + m + "x+" + b);
+    }
+  }
+}
