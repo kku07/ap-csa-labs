@@ -1,0 +1,29 @@
+//grade: 10/10
+
+/***************************************************************
+Name of the Lab/Assignment: Dispenser Operator Lab
+
+Preconditions: Input only a two digit integer.
+Postconditions: Change is printed into the console.
+
+****************************************************************/
+import java.util.Scanner;
+
+public class Dispenser
+{
+	public static void main(String[] args)
+	{
+		Scanner in = new Scanner(System.in); 
+		// user must enter the cost of the item purchased, in cents  
+		System.out.print("Enter price of item (in cents): "); 
+		int cost = in.nextInt(); //cost of item user is buying, in cents
+		int change = 100-cost;
+    int quarter = change/25;
+    int dime=(change-quarter*25)/10;
+    int nickel=((change-quarter*25-dime*10))/5;
+    int penny=(change-quarter*25-dime*10-nickel*5);
+		// TBD complete the code to output change amounts
+    
+    System.out.println("You bought an item for " + cost + " cent(s) and gave me a dollar, so your change is: \n \n" + quarter + " quarter(s), " + dime + " dime(s), " + nickel + " nickel(s), " + penny + " penny(ies)");
+	} //end main
+} //end class
