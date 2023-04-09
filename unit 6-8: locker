@@ -1,0 +1,225 @@
+//grade: 9.5/10
+
+import java.util.ArrayList;
+public class Locker {
+  private static int totalLockers; 
+  private int lockerNum; 
+  private ArrayList<Student> owners;
+  private CombinationLock lock;
+  private String[] books;
+
+  public Locker(){
+    lockerNum=totalLockers; 
+    totalLockers++; 
+    owners = new ArrayList<Student>();
+    books = new String[10];
+    lock = new CombinationLock();
+  }
+  //2-arg constructor
+  public Locker(Student owner, CombinationLock InitialLock) {
+    lockerNum=totalLockers; 
+    totalLockers++; 
+    owners=new ArrayList<Student>(); 
+    owners.add(owner);
+    books=new String[10]; 
+    lock=InitialLock; 
+  }
+  //6-arg constructor
+  public Locker(String name, int gradeLevel, boolean isAthlete, int combo1, int combo2, int combo3){
+    lockerNum=totalLockers; 
+    totalLockers++; 
+    books=new String[10]; 
+    lock = new CombinationLock (combo1,combo2,combo3); 
+    Student initialStudentOwner=new Student(name, gradeLevel,isAthlete); 
+    owners=new ArrayList<Student>(); 
+    owners.add(initialStudentOwner); 
+  
+  }
+  //precondition: enter a Student
+  //postcondition: adds a new Student owner at the end of the ArrayList
+  public void addOwner(Student stud) {
+    owners.add(stud);
+  }
+  //precondition: does not have a parameter
+  //postcondition: returns the owner of the locker
+  public Student getOwner(){
+    return owners.get(owners.size()-1);
+  }
+  //precondition: does not have a parameter
+  //postcondition: returns a String of book titles in the locker seperated by a space, does not contain null
+  public String getBookList(){
+    String bookList="";
+    for (String temp:books){
+      if (temp!=null)
+        bookList+=temp+" ";
+    }
+    return bookList; 
+  }
+  //precondition: enter a title of a book
+  //postcondition: returns whether there's an empty space for the book and puts it in
+  public boolean putInLocker(String title){
+    for (int i=0; i<books.length; i++){
+      if (books[i]==null){
+        books[i]=title; 
+        return true; 
+      }
+    }
+    return false; 
+  }
+  //precondition: enter a title of a book
+  //postcondition: returns whether the book was removed or not
+  public boolean removeFromLocker(String title) {
+    for (int i=0; i<books.length; i++){
+      if (books[i]==null)
+        return true; 
+      else if (books[i].equals(title)) {
+        books[i]=null; 
+        return true;
+      }
+    } 
+    return false; 
+  }
+  //precondition: enter a name of an owner you want to remove
+  //postcondition: removes the owner
+  public void removeOwner(String name){
+    for (int i=0; i<owners.size(); i++){
+      if (owners.get(i).getName().equals(name))
+        owners.remove(i);
+    }
+  }
+  //precondition: enter the grade level of owners you would like to count
+  //postcondition: returns the number of owners of lockers in that grade level
+  public int countGradeLevel(int gradeLevel){
+    int count = 0; 
+    for (Student temp:owners){
+      if (temp.getGradeLevel()==gradeLevel)
+        count++;
+    }
+    return count;
+      
+  }
+  //precondition: enter a book name to find in the locker
+  //postcondition: returns whether or not that book is in the locker
+  public boolean findBook(String keyword){
+    for (int i=0; i<books.length; i++){
+      if (books!=null && books[i].equals(keyword))
+        return true;
+    }
+    return false; 
+  }
+  //precondition: enter three integers to set the combination for the lock
+  //postcondition: sets the combination lock with those 3 numbers
+  public void setCombo(int num1, int num2, int num3){
+    lock=new CombinationLock(num1,num2,num3); 
+  }
+  //precondition: does not have a parameter
+  //postcondition: returns the number of owners for a locker
+  public int getOwnerSize(){
+    return owners.size(); 
+  }
+  //precondition: does not have a parameter
+  //postcondition: returns the total number of lockers
+  public static int getLockerNum(){
+    return totalLockers; 
+  }
+  //precondition: does not have a parameter
+  //postcondition: returns the locker's number, books in the locker, and combination lock for the locker
+  public String toString() {
+    return "Locker number: " + lockerNum + "\nCurrent owner: " + getOwner() + "\nBook list: " + getBookList() + "\nCombination lock: " + lock.getCombo1() + " " + lock.getCombo2() + " " + lock.getCombo3(); 
+  }
+}
+
+public class LockerTester {
+  public static void main(String[] args) {
+  //1: instantiate locker named locker1
+    Locker locker1 = new Locker();
+    
+  //2: instantiate locker named myLocker
+    Student mary = new Student("Mary Landover",10,false); 
+    Locker myLocker = new Locker(mary,new CombinationLock(1,2,3));
+    
+  //3: instantiate a locker named yourLocker
+    Locker yourLocker=new Locker("James King", 10, true, 3,4,5);
+    
+  //4: change combo on locker1
+    locker1.setCombo(11,13,17); 
+    
+  //5: add new owner to myLocker
+    Student tania=new Student("Tania Allsmith",11,false);
+    myLocker.addOwner(tania);
+        
+  //6:put 5 books in locker1
+  for (int i=0; i<5; i++) {
+    locker1.putInLocker("book"+i); 
+  }
+    
+  //7: try to remove book from myLocker
+  System.out.println(myLocker.removeFromLocker("Not A Book"));
+    
+  //8: remove book1 from locker1
+  locker1.removeFromLocker("book1");
+    
+  //9: put CSRocks in locker1
+  locker1.putInLocker("CSRocks");
+    
+  //10:add a new owner Rio to locker1
+  Student rio=new Student("Rio River",9,true);
+  locker1.addOwner(rio);
+    
+  //11: add a new 9th grade owner to locker1
+  Student katherine=new Student("Katherine Ku",9,true); 
+  locker1.addOwner(katherine);
+    
+  //12: add a new owner Finn to locker1
+  Student finn=new Student("Finn Bark",12,false);
+  locker1.addOwner(finn);
+    
+  //13: add a new owner of choice to locker1
+  Student anon = new Student("this guy", 11, true);
+  locker1.addOwner(anon);
+    
+  //14: try to put 5 books in locker1
+  for (int i=6; i<11; i++) {
+    locker1.putInLocker("book"+i); 
+  }
+
+  //15: print the book list of locker1
+  System.out.println(locker1.getBookList());
+    
+  //16: print the name of the owner of locker1
+  System.out.println(locker1.getOwner());
+    
+  //17: determine if book named Scholar of the World in in locker1
+  boolean foundScholar=locker1.findBook("Scholar of the World");
+  System.out.println("Is Scholar of the World there: " + foundScholar);
+    
+  //18: determine if book named CSRockss in in locker1
+  boolean foundCS=locker1.findBook("CSRocks");
+  System.out.println("Is CSRocks there: " + foundCS);
+    
+  //19: add a new owner again to locker1, Student with name Finn Bark
+  locker1.addOwner(finn);
+    
+  //20: add a new owner to locker1 named Cat
+  Student cat = new Student("Cat Stein", 9, true);
+  locker1.addOwner(cat);
+    
+  //21: remove the owner named Finn Bark from the list of owners of locker1
+  locker1.removeOwner("Finn Bark"); 
+    
+  //22: print out the number of owners that locker1 has had
+  System.out.println("The number of owners is:" + locker1.getOwnerSize()); 
+    
+  //23: print the number of owners of locker1 in grade 9
+  System.out.println("The number of 9th grade owners is: " + locker1.countGradeLevel(9));
+    
+  //24: print the number of lockers in use
+  System.out.println("Number of lockers in use: " + locker1.getLockerNum());
+    
+  //25: print all information about locker1
+  System.out.println(locker1);
+    
+  //26: print all information about myLocker
+  System.out.println(myLocker);
+  }
+}
