@@ -1,0 +1,49 @@
+//grade: 10/10
+
+import java.util.Scanner;
+import java.text.DecimalFormat;
+
+public class SavingsCalculator {
+
+  public static void main(String[] args) {
+
+    Scanner in = new Scanner(System.in);
+
+    System.out.println("Enter the number of years the money will be invested:");
+    double time = in.nextDouble();
+
+    System.out.println("Enter the amount of money saved:");
+    double principal = in.nextDouble();
+
+    System.out.println(getMessage(time, principal));
+
+  }
+  // write the code for the calcSavingsAccount method here, don't forget a
+  /*precondition: enter a positive number for time and principal
+    postcondition:  this method should return a double representing the amount of money earned in a bank account pays 1% annual interest compounded annually*/
+  public static double calcSavingsAccount(double savingsTime, double savingsPrincipal) {
+     return savingsPrincipal*Math.pow(1.0025,savingsTime*4);
+  }
+  // write the code for the calcMarketReturn method here, don't forget a
+  /*precondition: enter a positive number for time and principal
+    postcondition: this method should return a double representing the amount of money earned in the stock market (7% interest) */
+  public static double calcMarketReturn(double marketTime, double marketPrincipal) {
+    return marketPrincipal*Math.pow((Math.E),0.07*marketTime);
+  }
+  /*
+   * write the code for the getMessage method below, don't forget a precondition and postcondition.
+   * Do not rewrite code- you must call the other methods in this method to get credit;
+   * The body of the method has been started for you to create an instance of the
+   * DecimalFormat class.
+   * To format a value call using DecimalFormat, call the format method with the instance.
+   * See lab instructions for more details.
+   */
+  /* precondition: enter a postive number for time and principal
+    postcondition: This method will return a String that describes the outputs from investing the money in the stock market, depositing it in a bank account, and the difference between these two options.*/
+  public static String getMessage(double time, double principal){
+    DecimalFormat d = new DecimalFormat("0.00");
+    String savingsDecimal = d.format(calcSavingsAccount(time,principal));
+    String marketDecimal = d.format(calcMarketReturn(time,principal));
+    return "In a savings account with 1% annual interest for " + time + " years, you will save $" + savingsDecimal + ".\n" + "If you invest this money in the stock market for " + time + " years, you can expect to save $" + marketDecimal + "." + "\nYou can expect to save $" + (d.format(calcMarketReturn(time,principal) - calcSavingsAccount(time,principal))) + " more by investing in the stock market.";
+  }
+}
